@@ -1,10 +1,14 @@
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import products from '@/data/products.json'
 import categories from '@/data/categories.json'
 
 export function useProductSearch() {
   const searchKeyword = ref('')
   const activeCategory = ref(categories[0]?.id || '')
+
+  watch(activeCategory, () => {
+    searchKeyword.value = ''
+  })
 
   const isSearching = computed(() => searchKeyword.value.trim().length > 0)
 
