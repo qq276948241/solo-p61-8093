@@ -1,0 +1,165 @@
+[
+  {
+    "id": 1,
+    "categoryId": "coffee",
+    "name": "手冲曼特宁",
+    "description": "印尼苏门答腊，草本与烟熏的低沉余韵",
+    "price": 28,
+    "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=hand%20drip%20coffee%20pour%20over%20minimalist%20aesthetic%20beige%20background&image_size=square",
+    "specs": [
+      { "label": "温度", "options": ["热", "冰"], "default": "热" },
+      { "label": "甜度", "options": ["不添加", "少许", "标准"], "default": "不添加" }
+    ]
+  },
+  {
+    "id": 2,
+    "categoryId": "coffee",
+    "name": "耶加雪菲",
+    "description": "埃塞俄比亚，茉莉花香与柑橘果酸",
+    "price": 32,
+    "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=yirgacheffe%20coffee%20cup%20elegant%20ceramic%20warm%20lighting&image_size=square",
+    "specs": [
+      { "label": "温度", "options": ["热", "冰"], "default": "热" },
+      { "label": "甜度", "options": ["不添加", "少许", "标准"], "default": "不添加" }
+    ]
+  },
+  {
+    "id": 3,
+    "categoryId": "coffee",
+    "name": "燕麦拿铁",
+    "description": "醇香燕麦奶与意式浓缩的温柔碰撞",
+    "price": 30,
+    "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=oat%20milk%20latte%20art%20heart%20cozy%20cafe&image_size=square",
+    "specs": [
+      { "label": "温度", "options": ["热", "冰"], "default": "热" },
+      { "label": "浓度", "options": ["标准", "加浓缩"], "default": "标准" }
+    ]
+  },
+  {
+    "id": 4,
+    "categoryId": "coffee",
+    "name": "焦糖玛奇朵",
+    "description": "香草与焦糖交织的甜美时光",
+    "price": 30,
+    "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=caramel%20macchiato%20coffee%20drizzle%20aesthetic&image_size=square",
+    "specs": [
+      { "label": "温度", "options": ["热", "冰"], "default": "热" },
+      { "label": "甜度", "options": ["少糖", "标准", "多糖"], "default": "标准" }
+    ]
+  },
+  {
+    "id": 5,
+    "categoryId": "coffee",
+    "name": "冷萃咖啡",
+    "description": "12小时低温慢萃，丝滑回甘",
+    "price": 28,
+    "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=cold%20brew%20coffee%20glass%20ice%20summer%20minimal&image_size=square",
+    "specs": [
+      { "label": "甜度", "options": ["不添加", "少许", "标准"], "default": "不添加" },
+      { "label": "奶", "options": ["不加奶", "加鲜奶"], "default": "不加奶" }
+    ]
+  },
+  {
+    "id": 6,
+    "categoryId": "tea",
+    "name": "桂花乌龙",
+    "description": "金桂飘香，乌龙韵远",
+    "price": 22,
+    "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=osmanthus%20oolong%20tea%20chinese%20ceramic%20cup%20autumn&image_size=square",
+    "specs": [
+      { "label": "温度", "options": ["热", "冰"], "default": "热" },
+      { "label": "甜度", "options": ["无糖", "微糖", "标准"], "default": "微糖" }
+    ]
+  },
+  {
+    "id": 7,
+    "categoryId": "tea",
+    "name": "茉莉银针",
+    "description": "七窨一提，春茶与茉莉的相遇",
+    "price": 26,
+    "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=jasmine%20silver%20needle%20tea%20elegant%20glass%20pot%20flowers&image_size=square",
+    "specs": [
+      { "label": "温度", "options": ["热", "冰"], "default": "热" },
+      { "label": "甜度", "options": ["无糖", "微糖", "标准"], "default": "无糖" }
+    ]
+  },
+  {
+    "id": 8,
+    "categoryId": "tea",
+    "name": "伯爵红茶",
+    "description": "佛手柑油的东方神秘气息",
+    "price": 24,
+    "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=earl%20grey%20tea%20british%20afternoon%20tea%20vintage&image_size=square",
+    "specs": [
+      { "label": "温度", "options": ["热", "冰"], "default": "热" },
+      { "label": "奶", "options": ["不加奶", "加鲜奶"], "default": "不加奶" }
+    ]
+  },
+  {
+    "id": 9,
+    "categoryId": "tea",
+    "name": "白桃乌龙",
+    "description": "蜜桃果香融入醇和乌龙",
+    "price": 25,
+    "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=peach%20oolong%20tea%20pink%20peach%20fruit%20summer%20refresh&image_size=square",
+    "specs": [
+      { "label": "温度", "options": ["热", "冰"], "default": "冰" },
+      { "label": "甜度", "options": ["无糖", "微糖", "标准"], "default": "微糖" }
+    ]
+  },
+  {
+    "id": 10,
+    "categoryId": "dessert",
+    "name": "提拉米苏",
+    "description": "带我走吧，马斯卡彭与浓缩咖啡的经典",
+    "price": 32,
+    "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=tiramisu%20dessert%20cocoa%20powder%20elegant%20plate&image_size=square",
+    "specs": [
+      { "label": "份量", "options": ["单人份", "双人份"], "default": "单人份" }
+    ]
+  },
+  {
+    "id": 11,
+    "categoryId": "dessert",
+    "name": "巴斯克芝士",
+    "description": "焦香表层，绵软内心",
+    "price": 28,
+    "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=basque%20burnt%20cheesecake%20rustic%20golden%20brown&image_size=square",
+    "specs": [
+      { "label": "份量", "options": ["单人份", "双人份"], "default": "单人份" }
+    ]
+  },
+  {
+    "id": 12,
+    "categoryId": "dessert",
+    "name": "抹茶千层",
+    "description": "宇治抹茶与淡奶油的24层温柔",
+    "price": 30,
+    "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=matcha%20mille%20crepe%20cake%20green%20tea%20japanese%20style&image_size=square",
+    "specs": [
+      { "label": "份量", "options": ["单人份", "双人份"], "default": "单人份" }
+    ]
+  },
+  {
+    "id": 13,
+    "categoryId": "dessert",
+    "name": "可颂",
+    "description": "81层酥皮，黄油飘香",
+    "price": 15,
+    "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=french%20croissant%20golden%20flaky%20bakery%20morning&image_size=square",
+    "specs": [
+      { "label": "口味", "options": ["原味", "巧克力", "杏仁"], "default": "原味" }
+    ]
+  },
+  {
+    "id": 14,
+    "categoryId": "dessert",
+    "name": "桂花酒酿蛋糕",
+    "description": "秋日限定，桂花与米酒的东方韵味",
+    "price": 34,
+    "image": "https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=osmanthus%20rice%20wine%20cake%20chinese%20style%20dessert%20autumn&image_size=square",
+    "specs": [
+      { "label": "份量", "options": ["单人份", "双人份"], "default": "单人份" }
+    ]
+  }
+]

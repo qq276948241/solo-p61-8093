@@ -1,0 +1,17 @@
+[
+  {
+    "id": "coffee",
+    "name": "咖啡",
+    "icon": "☕"
+  },
+  {
+    "id": "tea",
+    "name": "茶",
+    "icon": "🍵"
+  },
+  {
+    "id": "dessert",
+    "name": "甜点",
+    "icon": "🍰"
+  }
+]
