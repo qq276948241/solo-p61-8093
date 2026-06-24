@@ -1,10 +1,15 @@
 <script setup>import { ref, computed } from 'vue';
 import { useCartStore } from '@/stores/cart';
+import { useProductSearch } from '@/composables/useProductSearch';
 import categories from '@/data/categories.json';
 import products from '@/data/products.json';
 const cartStore = useCartStore();
+const { searchKeyword, isSearching, resultsGroupedByCategory, matchedCategoryIds, totalMatchCount, clearSearch } = useProductSearch();
 const activeCategory = ref(categories[0]?.id || '');
-const filteredProducts = computed(() => products.filter(p => p.categoryId === activeCategory.value));
+const filteredProducts = computed(() => {
+ if (isSearching.value) return [];
+ return products.filter(p => p.categoryId === activeCategory.value);
+});
 const selectedProduct = ref(null);
 const selectedSpecs = ref({});
 const quantity = ref(1);
@@ -62,46 +67,102 @@ function confirmAddToCart(event) {
         v-for="cat in categories"
         :key="cat.id"
         class="category-item"
-        :class="{ active: activeCategory === cat.id }"
-        @click="activeCategory = cat.id"
+        :class="{
+          active: !isSearching && activeCategory === cat.id,
+          'search-hit': isSearching && matchedCategoryIds.has(cat.id)
+        }"
+        @click="activeCategory = cat.id; clearSearch()"
       >
         <span class="cat-icon">{{ cat.icon }}</span>
         <span class="cat-name">{{ cat.name }}</span>
+        <span v-if="isSearching && matchedCategoryIds.has(cat.id)" class="cat-dot"></span>
       </button>
     </aside>
 
     <section class="product-grid-wrapper">
-      <div class="category-title">
-        <h2>{{ categories.find(c => c.id === activeCategory)?.name }}</h2>
-        <span class="subtitle">
-          {{ categories.find(c => c.id === activeCategory)?.icon }} 精选推荐
-        </span>
+      <div class="search-bar">
+        <span class="search-icon">🔍</span>
+        <input
+          v-model="searchKeyword"
+          type="text"
+          class="search-input"
+          placeholder="搜索咖啡、茶、甜点..."
+        />
+        <button v-if="isSearching" class="search-clear" @click="clearSearch">✕</button>
       </div>
 
-      <div class="product-grid">
-        <article
-          v-for="product in filteredProducts"
-          :key="product.id"
-          class="product-card"
-          @click="openSpecModal(product)"
-        >
-          <div class="product-image">
-            <img :src="product.image" :alt="product.name" loading="lazy" />
+      <template v-if="isSearching">
+        <div class="search-status">
+          <span v-if="totalMatchCount > 0">找到 {{ totalMatchCount }} 个结果</span>
+          <span v-else class="no-result">未找到相关商品</span>
+        </div>
+
+        <div v-for="group in resultsGroupedByCategory" :key="group.category.id" class="search-group">
+          <div class="search-group-title">
+            <span>{{ group.category.icon }}</span>
+            <span>{{ group.category.name }}</span>
+            <span class="group-count">{{ group.products.length }}</span>
           </div>
-          <div class="product-info">
-            <h3 class="product-name">{{ product.name }}</h3>
-            <p class="product-desc">{{ product.description }}</p>
-            <div class="product-bottom">
-              <span class="product-price">
-                <small>¥</small>{{ product.price }}
-              </span>
-              <button class="add-btn" @click.stop="openSpecModal(product)">
-                +
-              </button>
+          <div class="product-grid">
+            <article
+              v-for="product in group.products"
+              :key="product.id"
+              class="product-card"
+              @click="openSpecModal(product)"
+            >
+              <div class="product-image">
+                <img :src="product.image" :alt="product.name" loading="lazy" />
+              </div>
+              <div class="product-info">
+                <h3 class="product-name">{{ product.name }}</h3>
+                <p class="product-desc">{{ product.description }}</p>
+                <div class="product-bottom">
+                  <span class="product-price">
+                    <small>¥</small>{{ product.price }}
+                  </span>
+                  <button class="add-btn" @click.stop="openSpecModal(product)">
+                    +
+                  </button>
+                </div>
+              </div>
+            </article>
+          </div>
+        </div>
+      </template>
+
+      <template v-else>
+        <div class="category-title">
+          <h2>{{ categories.find(c => c.id === activeCategory)?.name }}</h2>
+          <span class="subtitle">
+            {{ categories.find(c => c.id === activeCategory)?.icon }} 精选推荐
+          </span>
+        </div>
+
+        <div class="product-grid">
+          <article
+            v-for="product in filteredProducts"
+            :key="product.id"
+            class="product-card"
+            @click="openSpecModal(product)"
+          >
+            <div class="product-image">
+              <img :src="product.image" :alt="product.name" loading="lazy" />
             </div>
-          </div>
-        </article>
-      </div>
+            <div class="product-info">
+              <h3 class="product-name">{{ product.name }}</h3>
+              <p class="product-desc">{{ product.description }}</p>
+              <div class="product-bottom">
+                <span class="product-price">
+                  <small>¥</small>{{ product.price }}
+                </span>
+                <button class="add-btn" @click.stop="openSpecModal(product)">
+                  +
+                </button>
+              </div>
+            </div>
+          </article>
+        </div>
+      </template>
     </section>
 
     <Teleport to="body">
@@ -212,6 +273,28 @@ function confirmAddToCart(event) {
   font-weight: 600;
 }
 
+.category-item.search-hit {
+  background: rgba(93, 64, 55, 0.06);
+  color: var(--color-primary-light);
+  border-left-color: var(--color-accent);
+}
+
+.cat-dot {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  animation: dotPulse 1.5s ease infinite;
+}
+
+@keyframes dotPulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.4); }
+}
+
 .cat-icon {
   font-size: 22px;
 }
@@ -243,6 +326,107 @@ function confirmAddToCart(event) {
   font-size: 12px;
   color: var(--color-text-muted);
   letter-spacing: 1px;
+}
+
+.search-bar {
+  position: sticky;
+  top: 0;
+  z-index: 3;
+  background: var(--color-bg);
+  padding: 12px 4px 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.search-icon {
+  font-size: 16px;
+  flex-shrink: 0;
+  opacity: 0.6;
+}
+
+.search-input {
+  flex: 1;
+  height: 36px;
+  padding: 0 14px;
+  border: 1px solid var(--color-border);
+  border-radius: 18px;
+  background: var(--color-white);
+  color: var(--color-text);
+  font-size: 13px;
+  letter-spacing: 1px;
+  transition: var(--transition);
+}
+
+.search-input::placeholder {
+  color: var(--color-text-muted);
+  letter-spacing: 1px;
+}
+
+.search-input:focus {
+  border-color: var(--color-primary-light);
+  box-shadow: 0 0 0 2px rgba(93, 64, 55, 0.08);
+}
+
+.search-clear {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--color-bg-warm);
+  color: var(--color-text-muted);
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: var(--transition);
+}
+
+.search-clear:hover {
+  background: var(--color-border);
+  color: var(--color-primary);
+}
+
+.search-status {
+  padding: 4px 6px 12px;
+  font-size: 12px;
+  color: var(--color-text-muted);
+  letter-spacing: 1px;
+}
+
+.search-status .no-result {
+  color: var(--color-accent);
+}
+
+.search-group {
+  margin-bottom: 20px;
+}
+
+.search-group-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 6px 10px;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--color-primary);
+  letter-spacing: 2px;
+  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 12px;
+}
+
+.group-count {
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 10px;
+  background: var(--color-primary);
+  color: var(--color-white);
+  font-size: 11px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .product-grid {
