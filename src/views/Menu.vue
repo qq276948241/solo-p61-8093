@@ -1,15 +1,21 @@
-<script setup>import { ref, computed } from 'vue';
+<script setup>import { ref } from 'vue';
 import { useCartStore } from '@/stores/cart';
 import { useProductSearch } from '@/composables/useProductSearch';
-import categories from '@/data/categories.json';
-import products from '@/data/products.json';
 const cartStore = useCartStore();
-const { searchKeyword, isSearching, resultsGroupedByCategory, matchedCategoryIds, totalMatchCount, clearSearch } = useProductSearch();
-const activeCategory = ref(categories[0]?.id || '');
-const filteredProducts = computed(() => {
- if (isSearching.value) return [];
- return products.filter(p => p.categoryId === activeCategory.value);
-});
+const {
+  searchKeyword,
+  isSearching,
+  resultsGroupedByCategory,
+  matchedCategoryIds,
+  totalMatchCount,
+  activeCategoryInfo,
+  activeCategoryProducts,
+  categories,
+  isCategoryHit,
+  getCategoryClass,
+  selectCategory,
+  clearSearch
+} = useProductSearch();
 const selectedProduct = ref(null);
 const selectedSpecs = ref({});
 const quantity = ref(1);
@@ -67,15 +73,12 @@ function confirmAddToCart(event) {
         v-for="cat in categories"
         :key="cat.id"
         class="category-item"
-        :class="{
-          active: !isSearching && activeCategory === cat.id,
-          'search-hit': isSearching && matchedCategoryIds.has(cat.id)
-        }"
-        @click="activeCategory = cat.id; clearSearch()"
+        :class="getCategoryClass(cat.id)"
+        @click="selectCategory(cat.id)"
       >
         <span class="cat-icon">{{ cat.icon }}</span>
         <span class="cat-name">{{ cat.name }}</span>
-        <span v-if="isSearching && matchedCategoryIds.has(cat.id)" class="cat-dot"></span>
+        <span v-if="isCategoryHit(cat.id)" class="cat-dot"></span>
       </button>
     </aside>
 
@@ -132,15 +135,15 @@ function confirmAddToCart(event) {
 
       <template v-else>
         <div class="category-title">
-          <h2>{{ categories.find(c => c.id === activeCategory)?.name }}</h2>
+          <h2>{{ activeCategoryInfo?.name }}</h2>
           <span class="subtitle">
-            {{ categories.find(c => c.id === activeCategory)?.icon }} 精选推荐
+            {{ activeCategoryInfo?.icon }} 精选推荐
           </span>
         </div>
 
         <div class="product-grid">
           <article
-            v-for="product in filteredProducts"
+            v-for="product in activeCategoryProducts"
             :key="product.id"
             class="product-card"
             @click="openSpecModal(product)"

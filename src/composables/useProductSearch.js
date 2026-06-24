@@ -4,6 +4,7 @@ import categories from '@/data/categories.json'
 
 export function useProductSearch() {
   const searchKeyword = ref('')
+  const activeCategory = ref(categories[0]?.id || '')
 
   const isSearching = computed(() => searchKeyword.value.trim().length > 0)
 
@@ -37,6 +38,35 @@ export function useProductSearch() {
 
   const totalMatchCount = computed(() => searchResults.value.length)
 
+  const activeCategoryInfo = computed(
+    () => categories.find(c => c.id === activeCategory.value) || null
+  )
+
+  const activeCategoryProducts = computed(() => {
+    if (isSearching.value) return []
+    return products.filter(p => p.categoryId === activeCategory.value)
+  })
+
+  function isCategoryActive(categoryId) {
+    return !isSearching.value && activeCategory.value === categoryId
+  }
+
+  function isCategoryHit(categoryId) {
+    return isSearching.value && matchedCategoryIds.value.has(categoryId)
+  }
+
+  function getCategoryClass(categoryId) {
+    return {
+      active: isCategoryActive(categoryId),
+      'search-hit': isCategoryHit(categoryId)
+    }
+  }
+
+  function selectCategory(categoryId) {
+    searchKeyword.value = ''
+    activeCategory.value = categoryId
+  }
+
   function clearSearch() {
     searchKeyword.value = ''
   }
@@ -48,6 +78,14 @@ export function useProductSearch() {
     matchedCategoryIds,
     resultsGroupedByCategory,
     totalMatchCount,
+    activeCategory,
+    activeCategoryInfo,
+    activeCategoryProducts,
+    categories,
+    isCategoryActive,
+    isCategoryHit,
+    getCategoryClass,
+    selectCategory,
     clearSearch
   }
 }
